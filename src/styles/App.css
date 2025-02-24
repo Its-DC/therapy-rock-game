@@ -23,18 +23,15 @@ html, body {
     position: relative;
 }
 
-/* STATS pinned top-center */
+/* App.css */
 .top-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 10px; /* or top: 0 if you want it flush at the top edge */
-    left: 50%;
-    transform: translateX(-50%);
-    height: auto;
-    width: auto;
+    position: fixed;
+    top: 20px;
+    left: 0;
+    width: 100%;
     z-index: 10;
+    display: flex;
+    justify-content: center; /* Centers the statsInner container */
 }
 
 /* Volume pinned top-right */

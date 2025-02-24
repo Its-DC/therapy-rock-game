@@ -1,7 +1,7 @@
 ﻿// src/components/UI/UpgradePopup.js
 import React, { useState } from 'react';
 import { Rnd } from 'react-rnd';
-import { purchaseCost } from '../../utils/gameMath';
+import { purchaseCost } from '../../../utils/gameMath';
 import './UpgradePopup.css';
 
 export default function UpgradePopup({

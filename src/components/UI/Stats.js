@@ -1,71 +1,66 @@
-﻿import React from 'react';
-import { FaGem, FaArrowUp, FaLeaf } from 'react-icons/fa';
+﻿// Stats.js
+import React from 'react';
+import { FaGem, FaArrowUp, FaLeaf, FaBalanceScale } from 'react-icons/fa';
 
-export default function Stats({ rocks, gems, xp, level, relaxationPoints }) {
-    return (
-        <div style={styles.statsContainer}>
-            <div style={styles.statItem}>
-                <FaGem style={styles.icon} />
-                <span style={styles.label}>Rocks:</span>
-                <span style={styles.value}>{rocks}</span>
-            </div>
-
-            <div style={styles.statItem}>
-                <FaGem style={styles.icon} />
-                <span style={styles.label}>Gems:</span>
-                <span style={styles.value}>{gems}</span>
-            </div>
-
-            <div style={styles.statItem}>
-                <FaArrowUp style={styles.icon} />
-                <span style={styles.label}>Level:</span>
-                <span style={styles.value}>{level}</span>
-            </div>
-
-            <div style={styles.statItem}>
-                <FaArrowUp style={styles.icon} />
-                <span style={styles.label}>XP:</span>
-                <span style={styles.value}>{xp}</span>
-            </div>
-
-            <div style={styles.statItem}>
-                <FaLeaf style={styles.icon} />
-                <span style={styles.label}>Relaxation Points:</span>
-                <span style={styles.value}>{relaxationPoints}</span>
-            </div>
-        </div>
-    );
-};
-
-const styles = {
-    statsContainer: {
-        position: 'absolute',
-        top: '10px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        backgroundColor: 'rgba(0, 0, 0, 0.6)',
-        padding: '10px 15px',
-        borderRadius: '10px',
+const Stats = ({ rocks, gems, xp, level, relaxationPoints, zenPoints, ascensionCount, draggable }) => {
+    const baseStyle = {
+        padding: '0px',
         display: 'flex',
         flexDirection: 'row',
         gap: '15px',
         color: 'white',
         fontSize: '18px',
-        zIndex: 10,
-    },
-    statItem: {
-        display: 'flex',
+        justifyContent: 'center',
         alignItems: 'center',
-        gap: '10px',
-    },
-    icon: {
-        fontSize: '20px',
-    },
-    label: {
-        fontWeight: 'bold',
-    },
-    value: {
-        fontSize: '18px',
-        color: '#FFD700',
-    },
+    };
+
+    const containerStyle = draggable
+        ? { ...baseStyle, position: 'relative', top: 0, left: 0, transform: 'none' }
+        : { ...baseStyle, position: 'absolute', top: '10px', left: '50%', transform: 'translateX(-50%)' };
+
+    const itemStyle = { display: 'flex', alignItems: 'center', gap: '5px' };
+    const iconStyle = { fontSize: '20px' };
+    const labelStyle = { fontWeight: 'bold' };
+    const valueStyle = { fontSize: '18px', color: '#FFD700' };
+
+    return (
+        <div style={containerStyle}>
+            <div style={itemStyle}>
+                <FaGem style={iconStyle} />
+                <span style={labelStyle}>Rocks:</span>
+                <span style={valueStyle}>{rocks}</span>
+            </div>
+            <div style={itemStyle}>
+                <FaGem style={iconStyle} />
+                <span style={labelStyle}>Gems:</span>
+                <span style={valueStyle}>{gems}</span>
+            </div>
+            <div style={itemStyle}>
+                <FaArrowUp style={iconStyle} />
+                <span style={labelStyle}>XP:</span>
+                <span style={valueStyle}>{xp}</span>
+            </div>
+            <div style={itemStyle}>
+                <FaArrowUp style={iconStyle} />
+                <span style={labelStyle}>Level:</span>
+                <span style={valueStyle}>{level}</span>
+            </div>
+            <div style={itemStyle}>
+                <FaLeaf style={iconStyle} />
+                <span style={labelStyle}>Relax:</span>
+                <span style={valueStyle}>{relaxationPoints}</span>
+            </div>
+            <div style={itemStyle}>
+                <FaBalanceScale style={iconStyle} />
+                <span style={labelStyle}>Zen:</span>
+                <span style={valueStyle}>{zenPoints}</span>
+            </div>
+            <div style={itemStyle}>
+                <span style={labelStyle}>Ascensions:</span>
+                <span style={valueStyle}>{ascensionCount}</span>
+            </div>
+        </div>
+    );
 };
+
+export default Stats;

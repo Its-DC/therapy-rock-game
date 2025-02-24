@@ -12,10 +12,10 @@ import Birds from './components/Environment/Birds';
 import Grass from './components/Environment/Grass';
 
 // UI components
-import Stats from './components/UI/Stats';
-import VolumeButton from './components/UI/VolumeButton';
-import UpgradePopup from './components/UI/UpgradePopup';
-import LootBoxModal from './components/UI/LootBoxModal';
+import MoveableStatsBar from './components/UI/stats-bar/MoveableStatsBar';
+import VolumeButton from './components/UI/volume-button/VolumeButton';
+import UpgradePopup from './components/UI/upgrade-menu/UpgradePopup';
+import LootBoxNotification from './components/UI/lootbox/LootBoxNotification';
 
 // Game component
 import Rock from './components/Game/Rock';
@@ -33,9 +33,13 @@ export default function App() {
         upgrades,
         lootBoxes,
         prestigeMessage,
+        clearPrestigeMessage,
         autoClickRate,
         rockPerClick,
         xpPerClick,
+        ascensionCount,
+        lootBoxNotifications,    // New array of notifications
+        removeLootBoxNotification, // Function to remove a notification by id
         handleRockClick,
         purchaseUpgrade,
         claimOneLootBox,
@@ -43,44 +47,66 @@ export default function App() {
     } = useGameLogic();
 
     const [showUpgradePopup, setShowUpgradePopup] = useState(false);
-    const [showLootModal, setShowLootModal] = useState(false);
 
+    // Clear prestige notification after 3 seconds
     useEffect(() => {
         if (prestigeMessage) {
             const timer = setTimeout(() => {
-                // Optionally clear the message.
+                clearPrestigeMessage();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [prestigeMessage]);
+    }, [prestigeMessage, clearPrestigeMessage]);
 
     return (
         <div className="App">
-            <div className="top-container">
-                <Stats
-                    rocks={rocks}
-                    gems={gems}
-                    xp={xp}
-                    level={level}
-                    relaxationPoints={relaxationPoints}
-                />
-            </div>
+            {/* Draggable stats bar */}
+            <MoveableStatsBar
+                rocks={rocks}
+                gems={gems}
+                xp={xp}
+                level={level}
+                relaxationPoints={relaxationPoints}
+                zenPoints={zenPoints}
+                ascensionCount={ascensionCount}
+            />
 
             <div className="volume-wrapper">
                 <VolumeButton volume={volume} setVolume={setVolume} />
             </div>
 
-            <div style={{ position: 'absolute', bottom: '20px', right: '20px', zIndex: 1500, display: 'flex', gap: '10px' }}>
+            {/* Bottom–right container for Zen Points, Loot Box Icon, and Upgrade Button */}
+            <div style={{
+                position: 'absolute',
+                bottom: '20px',
+                right: '20px',
+                zIndex: 1500,
+                display: 'flex',
+                gap: '10px',
+                alignItems: 'center'
+            }}>
                 <div
-                    className="lootbox-notification"
-                    onClick={() => setShowLootModal(true)}
+                    className="zen-points-display"
+                    style={{
+                        fontSize: '24px',
+                        background: 'rgba(255,255,255,0.9)',
+                        padding: '5px 10px',
+                        borderRadius: '20px',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                    }}
+                >
+                    ☮️ <span className="zen-points-total">{zenPoints}</span>
+                </div>
+                <div
+                    className="lootbox-icon"
+                    onClick={() => claimOneLootBox()}
                     style={{
                         cursor: 'pointer',
                         fontSize: '24px',
                         background: 'rgba(255,255,255,0.9)',
                         padding: '5px 10px',
                         borderRadius: '20px',
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
                     }}
                 >
                     🎁 <span className="lootbox-count">{lootBoxes.length}</span>
@@ -92,23 +118,23 @@ export default function App() {
                         padding: '10px 15px',
                         fontSize: '16px',
                         borderRadius: '4px',
-                        cursor: 'pointer',
+                        cursor: 'pointer'
                     }}
                 >
                     Show Upgrades ↗️
                 </button>
             </div>
 
-            {showLootModal && (
-                <LootBoxModal
-                    lootBoxes={lootBoxes}
-                    onClaim={() => {
-                        claimOneLootBox();
-                        setShowLootModal(false);
-                    }}
-                    onDismiss={() => setShowLootModal(false)}
-                />
-            )}
+            {/* Bottom–left container for stacked loot box notifications */}
+            <div style={{ position: 'fixed', bottom: '20px', left: '20px', zIndex: 1500 }}>
+                {lootBoxNotifications.map(notification => (
+                    <LootBoxNotification
+                        key={notification.id}
+                        upgrade={notification}
+                        onClear={() => removeLootBoxNotification(notification.id)}
+                    />
+                ))}
+            </div>
 
             {showUpgradePopup && (
                 <UpgradePopup
@@ -146,7 +172,7 @@ export default function App() {
                         padding: '10px 15px',
                         fontSize: '16px',
                         borderRadius: '4px',
-                        cursor: 'pointer',
+                        cursor: 'pointer'
                     }}
                 >
                     Prestige (Ascend)
