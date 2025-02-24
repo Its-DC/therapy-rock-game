@@ -1,0 +1,92 @@
+﻿/* Lock full screen */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #87CEEB; /* Light blue sky */
+}
+
+/* Main game container */
+.App {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+/* STATS pinned top-center */
+.top-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 10px; /* or top: 0 if you want it flush at the top edge */
+    left: 50%;
+    transform: translateX(-50%);
+    height: auto;
+    width: auto;
+    z-index: 10;
+}
+
+/* Volume pinned top-right */
+.volume-wrapper {
+    position: absolute;
+    top: -30px;
+    right: 10px;
+    z-index: 999;
+}
+
+/* Stats container if you want to keep your old style inside top-container */
+.stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    min-width: 250px;
+    max-width: 400px;
+}
+
+/* Menu Section if you use it for UpgradeMenu or something */
+.menu-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    min-width: 250px;
+    max-width: 400px;
+}
+
+@media screen and (max-width: 768px) {
+    .top-container {
+        flex-direction: column;
+        align-items: center;
+        top: 5px;
+    }
+
+    .stats-container, .menu-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+}
+.prestige-notification {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 20px 30px;
+    border-radius: 8px;
+    z-index: 3000;
+    font-size: 1.2em;
+    text-align: center;
+}
